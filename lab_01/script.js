@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded',
         });
 
         document.getElementById(palette).addEventListener('input', updatePalette)
+
+        updateAll(255, 255, 255)
     }
 )
 
@@ -104,7 +106,7 @@ function updateHsv(h_id, s_id, v_id, type) {
 function updatePalette() {
     color = document.getElementById(palette).value
     colors = hexToRgv(color)
-    updateAll(colors[0], colors[1], colors[2], Skip.PALETTE, 0)
+    updateAll(colors[0], colors[1], colors[2], Skip.PALETTE, -1)
 }
 
 function updateAll(r, g, b, skip, type) {
@@ -131,16 +133,11 @@ function updateAll(r, g, b, skip, type) {
         document.getElementById(rgbRange[2]).value = b
     }
     
-    k = Math.min(100 - r * 100 / 255, 100 - g * 100 / 255, 100 - b * 100 / 255)
-    if (k == 100) {
-        c = 0
-        m = 0
-        y = 0
-    } else {
-        c = Math.round((100 - r * 100 / 255 - k) / (100 - k) * 100)
-        m = Math.round((100 - g * 100 / 255 - k) / (100 - k) * 100)
-        y = Math.round((100 - b * 100 / 255 - k) / (100 - k) * 100)
-    }
+    cmyk = rgbToCmyk(r, g, b)
+    c = cmyk[0]
+    m = cmyk[1]
+    y = cmyk[2]
+    k = cmyk[3]
 
     if (skip == Skip.CMYK) {
         if (type != Type.NUMBER) {
@@ -170,7 +167,7 @@ function updateAll(r, g, b, skip, type) {
         document.getElementById(palette).value = rgbToHex(r, g, b)
     }
 
-    hsl = rgbToHSL(r, g, b)
+    hsl = rgbToHsl(r, g, b)
     hsv = hslToHsv(hsl[0], hsl[1], hsl[2])
     h = hsv[0]
     s = hsv[1]
@@ -197,7 +194,21 @@ function updateAll(r, g, b, skip, type) {
     }
 }
 
-function hsvToRgb(h, s, v){
+function rgbToCmyk(r, g, b) {
+    k = Math.min(100 - r * 100 / 255, 100 - g * 100 / 255, 100 - b * 100 / 255)
+    if (k == 100) {
+        c = 0
+        m = 0
+        y = 0
+    } else {
+        c = (100 - r * 100 / 255 - k) / (100 - k) * 100
+        m = (100 - g * 100 / 255 - k) / (100 - k) * 100
+        y = (100 - b * 100 / 255 - k) / (100 - k) * 100
+    }
+    return [Math.round(c), Math.round(m), Math.round(y), Math.round(k)]
+}
+
+function hsvToRgb(h, s, v) {
     h /= 100
     s /= 100
     v /= 100
@@ -221,7 +232,7 @@ function hsvToRgb(h, s, v){
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function rgbToHSL(r, g, b) {
+function rgbToHsl(r, g, b) {
     r /= 255
     g /= 255
     b /= 255
@@ -264,11 +275,9 @@ function rgbToHex(r, g, b) {
 }
 
 function hexToRgv(hex) {
-    console.log(hex)
     let bigint = parseInt(hex.slice(1), 16);
     let r = (bigint >> 16) & 255;
     let g = (bigint >> 8) & 255;
     let b = bigint & 255;
-    console.log("good")
     return [Math.round(r), Math.round(g), Math.round(b)]
 }
