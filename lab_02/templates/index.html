@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="templates/styles.css">
+    <title>Images</title>
+</head>
+<body>
+    <form id="uploadForm" enctype="multipart/form-data" method="post">
+        <input name="file" type="file">
+        <input type="button" value="upload" onclick="uploadFile()">
+    </form>
+    <div id="image"></div>
+    <form id="actionForm">
+        <input type="button" value="original" onclick="getOriginal()">
+        <input type="button" value="boundaries" onclick="getBoundaries()">
+        <input type="button" value="linear-contrast" onclick="getLinearContrast()">
+        <input type="button" value="histogram" onclick="getHistogram()">
+    </form>
+    <script src="templates/script.js"></script>
+</body>
+</html>
