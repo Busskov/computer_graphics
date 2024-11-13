@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="templates/styles.css">
+    <title>Растеризация</title>
+</head>
+<body>
+    <h1>Растеризация отрезков и кривых</h1>
+    <div>
+        <canvas id="canvas" width="600" height="400"></canvas>
+    </div>
+    <form>
+        <input id="x-from" type="number" placeholder="x0">
+        <input id="y-from" type="number" placeholder="y0">
+        <input id="x-to" type="number" placeholder="x1">
+        <input id="y-to" type="number" placeholder="y1">
+        <button type="button" onclick="draw()">Draw Line</button>
+        <button type="button" onclick="zoom_out()">Zoom Out</button>
+        <button type="button" onclick="zoom_in()">Zoom In</button>
+    </form>
+    <script src="templates/script.js"></script>
+</body>
+</html>
